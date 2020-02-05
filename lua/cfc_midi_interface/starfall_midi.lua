@@ -12,7 +12,7 @@ hook.Add("Initialize", "MIDI_SF", function()
 	end
 
 	-- We want to limit playNote calls as it directly calls net.Send, and could be used to lag the server.
-	local limitCVar = GetConvar("sv_midi_max_notes_per_second")
+	local limitCVar = GetConVar("sv_midi_sf_notes_quota")
 	local limit = limitCVar:GetInt()
 	cvars.AddChangeCallback("sv_midi_sf_notes_quota", function(_, newLimit)
 		limit = newLimit
