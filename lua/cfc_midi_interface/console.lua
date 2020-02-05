@@ -20,6 +20,11 @@ local function midiClose()
     end
 end
 
+concommand.Add( "midi_reload", function( ply, cmd, args )
+    cfc_midi.print("Reloading...")
+    cfc_midi.load()
+end )
+
 hook.Add( "cfc_midi_init", "cfc_midi_console", function( _midi )
     midi = _midi
 

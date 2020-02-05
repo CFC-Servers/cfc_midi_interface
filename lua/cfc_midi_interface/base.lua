@@ -47,57 +47,61 @@ function cfc_midi.printChat( ... )
     chat.AddText( Color( 0, 255, 255 ), "MIDI: ", Color( 220, 220, 220 ), printPre( false, ... ) )
 end
 
--- If file exists ( windows or linux )
-if file.Exists( "lua/bin/gmcl_midi_win32.dll", "MOD" ) or file.Exists( "lua/bin/gmcl_midi_linux.dll", "MOD" ) then
-    cfc_midi.print( "GMCL-Module detected!" )
-    require( "midi" ) -- Import the library
-    if not midi then -- Check it succeeded
-        print( "GMCL-Module failed to initialize." )
-        return
-    end
-    cfc_midi.printChat( "GMCL-Module initialised. Use console commands midi_devices and midi_debug [0|1] to use." )
+function cfc_midi.load()
+    -- If file exists ( windows or linux )
+    if file.Exists( "lua/bin/gmcl_midi_win32.dll", "MOD" ) or file.Exists( "lua/bin/gmcl_midi_linux.dll", "MOD" ) then
+        cfc_midi.print( "GMCL-Module detected!" )
+        require( "midi" ) -- Import the library
+        if not midi then -- Check it succeeded
+            print( "GMCL-Module failed to initialize." )
+            return
+        end
+        cfc_midi.printChat( "GMCL-Module initialised. Use console commands midi_devices and midi_debug [0|1] to use." )
 
-    -- Connect to first device if it exists for convenience
-    local ports = midi.GetPorts()
-    local portsCount = table.Count( ports )
-    if portsCount > 0 then
-        midi.Open( 0 )
-        cfc_midi.print( "Connected to device " .. ports[0] )
-    end
-
-    hook.Add( "MIDI", "midiPlayablePiano", function( time, command, note, velocity, ... )
-        local code = midi.GetCommandCode( command )
-        local name = midi.GetCommandName( command )
-        if name == "NOTE_ON" and velocity == 0 then
-            name = "NOTE_OFF"
+        -- Connect to first device if it exists for convenience
+        local ports = midi.GetPorts()
+        local portsCount = table.Count( ports )
+        if portsCount > 0 then
+            midi.Open( 0 )
+            cfc_midi.print( "Connected to device " .. ports[0] )
         end
 
-        -- Do debug print if enabled
-        local cVar = GetConVar( "midi_debug" )
-        if cVar and cVar:GetBool() then
-            -- The code is a byte ( number between 0 and 254 ).
-            cfc_midi.print( " = == EVENT = = =" )
-            cfc_midi.print( "Time:\t", time )
-            cfc_midi.print( "Code:\t", code )
-            cfc_midi.print( "Channel:\t", midi.GetCommandChannel( command ) )
-            cfc_midi.print( "Name:\t", name )
-            cfc_midi.print( "Parameters", note, velocity, ... )
-        end
+        hook.Add( "MIDI", "midiPlayablePiano", function( time, command, note, velocity, ... )
+            local code = midi.GetCommandCode( command )
+            local name = midi.GetCommandName( command )
+            if name == "NOTE_ON" and velocity == 0 then
+                name = "NOTE_OFF"
+            end
 
-        -- Get instrument entity
-        local instrument = LocalPlayer().Instrument
-        if not IsValid( instrument ) then return end
+            -- Do debug print if enabled
+            local cVar = GetConVar( "midi_debug" )
+            if cVar and cVar:GetBool() then
+                -- The code is a byte ( number between 0 and 254 ).
+                cfc_midi.print( " = == EVENT = = =" )
+                cfc_midi.print( "Time:\t", time )
+                cfc_midi.print( "Code:\t", code )
+                cfc_midi.print( "Channel:\t", midi.GetCommandChannel( command ) )
+                cfc_midi.print( "Name:\t", name )
+                cfc_midi.print( "Parameters", note, velocity, ... )
+            end
 
-        -- Increase max keys ( previously 4 ) so you can play something good
-        instrument.MaxKeys = 10
+            -- Get instrument entity
+            local instrument = LocalPlayer().Instrument
+            if not IsValid( instrument ) then return end
 
-        -- Zero velocity NOTE_ON substitutes NOTE_OFF
-        if not midi or name ~= "NOTE_ON" then return end
-        if velocity == 0 or not cfc_midi.MIDIKeys or not cfc_midi.MIDIKeys[note - 35] then return end
+            -- Increase max keys ( previously 4 ) so you can play something good
+            instrument.MaxKeys = 10
 
-        cfc_midi.sendNote( instrument, note - 35 )
-    end )
+            -- Zero velocity NOTE_ON substitutes NOTE_OFF
+            if not midi or name ~= "NOTE_ON" then return end
+            if velocity == 0 or not cfc_midi.MIDIKeys or not cfc_midi.MIDIKeys[note - 35] then return end
 
-    -- Tell others it worked
-    hook.Run( "cfc_midi_init", midi )
+            cfc_midi.sendNote( instrument, note - 35 )
+        end )
+
+        -- Tell others it worked
+        hook.Run( "cfc_midi_init", midi )
+    end
 end
+
+cfc_midi.load()
