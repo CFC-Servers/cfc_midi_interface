@@ -48,12 +48,12 @@ function cfc_midi.printChat( ... )
 end
 
 -- If file exists (windows or linux)
-if file.Exists("lua/bin/gmcl_midi_win32.dll", "MOD") or file.Exists("lua/bin/gmcl_midi_linux.dll", "MOD") then 
+if file.Exists("lua/bin/gmcl_midi_win32.dll", "MOD") or file.Exists("lua/bin/gmcl_midi_linux.dll", "MOD") then
 	cfc_midi.print("GMCL-Module detected!")
 	require("midi") -- Import the library
 	if not midi then -- Check it succeeded
 		print("GMCL-Module failed to initialize.")
-		return	
+		return
 	end
 	cfc_midi.printChat("GMCL-Module initialised. Use console commands midi_devices and midi_debug [0|1] to use.")
 

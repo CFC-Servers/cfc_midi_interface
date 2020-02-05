@@ -3,7 +3,6 @@ hook.Add("Initialize", "MIDI_SF", function()
 	if not SF then return end
 	SF.hookAdd("MIDI")
 	local ent_methods = SF.Entities.Methods
-	local checktype = SF.CheckType
 
 	function ent_methods:isInstrument()
 		SF.CheckType(self, SF.Entities.Metatable)
@@ -45,7 +44,11 @@ hook.Add("Initialize", "MIDI_SF", function()
 			error("Entity is not an instrument.")
 		end
 		if FPP then
-			if not FPP.canTouchEnt(ent, "Physgun") then
+			-- This is extracted as Jenkins complains about the double if.
+			-- However, joining them into one condition will give unwanted behaviour
+			-- Silly Jenkins 
+			local canTouch = FPP.canTouchEnt(ent, "Physgun")
+			if not canTouch then
 				error("You do not have permission to send notes to this instrument")
 			end
 		else

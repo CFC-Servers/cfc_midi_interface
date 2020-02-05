@@ -38,7 +38,7 @@ hook.Add("cfc_midi_init", "cfc_midi_console", function(_midi)
 			)
 		else
 			cfc_midi.print("No devices connected.")
-		end	
+		end
 	end)
 
 	CreateConVar("midi_debug", "0", FCVAR_ARCHIVE, "Should MIDI events be printed to chat", 0, 1)
