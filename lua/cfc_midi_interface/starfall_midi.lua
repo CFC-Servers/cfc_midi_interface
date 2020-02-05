@@ -44,19 +44,13 @@ hook.Add("Initialize", "MIDI_SF", function()
 			error("Entity is not an instrument.")
 		end
 		if FPP then
-			-- This is extracted as Jenkins complains about the double if.
-			-- However, joining them into one condition will give unwanted behaviour
-			-- Silly Jenkins 
-			local canTouch = FPP.canTouchEnt(ent, "Physgun")
-			if not canTouch then
+			if not FPP.canTouchEnt(ent, "Physgun") then
 				error("You do not have permission to send notes to this instrument")
 			end
 		else
 			local o = ent:GetOwner()
-			if IsValid(o) then
-				if o ~= LocalPlayer() then
-					error("You do not have permission to send notes to this instrument")
-				end
+			if IsValid(o) and o ~= LocalPlayer() then
+				error("You do not have permission to send notes to this instrument")
 			end
 		end
 
