@@ -47,7 +47,7 @@ hook.Add( "Initialize", "MIDI_SF", function()
         if not ent.OnRegisteredKeyPlayed then
             error( "Entity is not an instrument." )
         end
-        
+
         if FPP then
             if not FPP.canTouchEnt( ent, "Physgun" ) then
                 error( "You do not have permission to send notes to this instrument" )
