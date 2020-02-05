@@ -36,7 +36,7 @@ local function printPre( addNewl, ... )
             table.insert( out, "\t" )
         end
     end
-    
+
     if addNewl then
         table.insert( out, "\n" )
     end
