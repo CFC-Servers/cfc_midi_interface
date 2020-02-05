@@ -32,8 +32,10 @@ hook.Add( "cfc_midi_init", "cfc_midi_console", function( _midi )
     concommand.Add( "midi_devices", function( ply, cmd, args )
         local ports = midi.GetPorts()
         local portsCount = table.Count( ports )
+
         if portsCount > 0 then
             cfc_midi.print( "Opening menu..." )
+            
             Derma_Query( "Which device you would like to use?" .. ( portsCount > 3 and " ( Max. 3 devices )" or "" ),
                 "Device selection",
                 "Disable", midiClose(),

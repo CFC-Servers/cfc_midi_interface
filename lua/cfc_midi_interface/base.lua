@@ -10,9 +10,11 @@ function cfc_midi.sendNote( instrument, note )
     if not instrument.OnRegisteredKeyPlayed then
         error( "Invalid instrument entity." )
     end
+
     if not cfc_midi.MIDIKeys[note] then
         error( "Note out of range. ( 1-" .. #cfc_midi.MIDIKeys .. " )" )
     end
+
     instrument:OnRegisteredKeyPlayed( cfc_midi.MIDIKeys[note] )
     net.Start( "InstrumentNetwork" )
         net.WriteEntity( instrument )
@@ -26,15 +28,19 @@ local function printPre( addNewl, ... )
     local d = {...}
     local last = #d
     local out = {}
+
     for k, v in ipairs( d ) do
         table.insert( out, tostring( v ) )
+
         if k ~= last then
             table.insert( out, "\t" )
         end
     end
+    
     if addNewl then
         table.insert( out, "\n" )
     end
+
     return unpack( out )
 end
 
@@ -52,6 +58,7 @@ function cfc_midi.load()
     if file.Exists( "lua/bin/gmcl_midi_win32.dll", "MOD" ) or file.Exists( "lua/bin/gmcl_midi_linux.dll", "MOD" ) then
         cfc_midi.print( "GMCL-Module detected!" )
         require( "midi" ) -- Import the library
+
         if not midi then -- Check it succeeded
             print( "GMCL-Module failed to initialize." )
             return
