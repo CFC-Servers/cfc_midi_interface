@@ -1,9 +1,10 @@
 -- Adds SF hook call, and ability to send key events to an instrument
 hook.Add( "Initialize", "MIDI_SF", function()
     if not SF then return end
-    SF.hookAdd( "MIDI" )
-    local ent_methods = SF.Entities.Methods
 
+    SF.hookAdd( "MIDI" )
+
+    local ent_methods = SF.Entities.Methods
     function ent_methods:isInstrument()
         SF.CheckType( self, SF.Entities.Metatable )
         local e = SF.Entities.Unwrap( self )
@@ -11,12 +12,14 @@ hook.Add( "Initialize", "MIDI_SF", function()
     end
 
     -- We want to limit playNote calls as it directly calls net.Send, and could be used to lag the server.
+    -- Get limit convar, and keep it updated
     local limitCVar = GetConVar( "sv_midi_sf_notes_quota" )
     local limit = limitCVar:GetInt()
     cvars.AddChangeCallback( "sv_midi_sf_notes_quota", function( _, newLimit )
         limit = newLimit
     end )
 
+    -- Create timer when needed to reset the noteCount
     local noteCount = 0
     local timerActive = false
     local function createTimer()
@@ -39,10 +42,12 @@ hook.Add( "Initialize", "MIDI_SF", function()
     function ent_methods:playNote( noteIdx )
         SF.CheckType( self, SF.Entities.Metatable )
         SF.CheckLuaType( noteIdx, TYPE_NUMBER )
+
         local ent = SF.Entities.Unwrap( self )
         if not ent.OnRegisteredKeyPlayed then
             error( "Entity is not an instrument." )
         end
+        
         if FPP then
             if not FPP.canTouchEnt( ent, "Physgun" ) then
                 error( "You do not have permission to send notes to this instrument" )
