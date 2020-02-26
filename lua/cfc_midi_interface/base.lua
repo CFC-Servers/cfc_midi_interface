@@ -55,7 +55,7 @@ end
 
 function cfc_midi.load()
     -- If file exists ( windows or linux )
-    if file.Exists( "lua/bin/gmcl_midi_win32.dll", "MOD" ) or 
+    if file.Exists( "lua/bin/gmcl_midi_win32.dll", "MOD" ) or
        file.Exists( "lua/bin/gmcl_midi_win64.dll", "MOD" ) or
        file.Exists( "lua/bin/gmcl_midi_linux.dll", "MOD" ) then
 
