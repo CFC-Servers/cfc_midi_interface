@@ -21,7 +21,7 @@ local function midiClose()
 end
 
 concommand.Add( "midi_reload", function( ply, cmd, args )
-    cfc_midi.print("Reloading...")
+    cfc_midi.print( "Reloading..." )
     cfc_midi.load()
 end )
 
