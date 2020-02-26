@@ -77,8 +77,8 @@ function cfc_midi.load()
         end
 
         hook.Add( "MIDI", "midiPlayablePiano", function( time, command, note, velocity, ... )
-        	if not command then return end
-        	
+            if not command then return end
+
             local code = midi.GetCommandCode( command )
             local name = midi.GetCommandName( command )
             if name == "NOTE_ON" and velocity == 0 then
