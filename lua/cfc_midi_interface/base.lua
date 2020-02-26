@@ -55,7 +55,10 @@ end
 
 function cfc_midi.load()
     -- If file exists ( windows or linux )
-    if file.Exists( "lua/bin/gmcl_midi_win32.dll", "MOD" ) or file.Exists( "lua/bin/gmcl_midi_linux.dll", "MOD" ) then
+    if file.Exists( "lua/bin/gmcl_midi_win32.dll", "MOD" ) or 
+       file.Exists( "lua/bin/gmcl_midi_win64.dll", "MOD" ) or
+       file.Exists( "lua/bin/gmcl_midi_linux.dll", "MOD" ) then
+       	
         cfc_midi.print( "GMCL-Module detected!" )
         require( "midi" ) -- Import the library
 
@@ -74,6 +77,7 @@ function cfc_midi.load()
         end
 
         hook.Add( "MIDI", "midiPlayablePiano", function( time, command, note, velocity, ... )
+            if not command then return end
             local code = midi.GetCommandCode( command )
             local name = midi.GetCommandName( command )
             if name == "NOTE_ON" and velocity == 0 then
