@@ -2,8 +2,14 @@
 This addon allows users with MIDI devices to play the [Playable Piano](https://steamcommunity.com/sharedfiles/filedetails/?id=104548572) addon with said device.  
 It also integrates Starfall hooks and functions for the MIDI devices and Playable Piano.  
 
-## Important
-Clients are required to have [gmcl_midi.dll](https://github.com/FPtje/gmcl_midi) in `garrysmod/lua/bin` for MIDI devices to be used.
+## Requirements
+Clients are required to have [gmcl_midi.dll](https://github.com/FPtje/gmcl_midi/releases) in `garrysmod/lua/bin` for MIDI devices to be used.
+
+Just click the link and download the appropriate version of `gmcl_midi`.
+
+If you're running default Garry's Mod, download `gmcl_midi_win32.dll`.
+
+If you're running Garry's Mod on the 64-bit / Chromium branch, download `gmcl_midi_win64.dll`.
 
 ## Console Commands
 - `midi_devices` - This allows you to select the MIDI device you wish to use.
