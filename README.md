@@ -5,7 +5,7 @@ It also integrates Starfall hooks and functions for the MIDI devices and Playabl
 ## Requirements
 Clients are required to have [gmcl_midi.dll](https://github.com/FPtje/gmcl_midi/releases) in `garrysmod/lua/bin` for MIDI devices to be used.
 
-Just click the link and download the appropriate version of `gmcl_midi`.
+Just click the link and download the appropriate version of `gmcl_midi` from the latest release.
 
 If you're running default Garry's Mod, download `gmcl_midi_win32.dll`.
 
