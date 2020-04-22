@@ -1,13 +1,22 @@
 -- Adds SF hook call, and ability to send key events to an instrument
-hook.Add( "Initialize", "MIDI_SF", function()
-    if not SF then return end
 
+return function(instance)
     SF.hookAdd( "MIDI" )
 
-    local ent_methods = SF.Entities.Methods
+    local ent_unwrap = instance.Types.Entity.Unwrap
+    local ent_methods = instance.Types.Entity.Methods
+
+    local function getent(self)
+        local ent = ent_unwrap(self)
+        if ent:IsValid() or ent:IsWorld() then
+            return ent
+        else
+            SF.Throw("Entity is not valid.", 3)
+        end
+    end
+
     function ent_methods:isInstrument()
-        SF.CheckType( self, SF.Entities.Metatable )
-        local e = SF.Entities.Unwrap( self )
+        local e = getent( self )
         return e.OnRegisteredKeyPlayed and true or false
     end
 
@@ -40,10 +49,9 @@ hook.Add( "Initialize", "MIDI_SF", function()
     -- Returns if successful or not
     -- Limited by sv_midi_sf_notes_quota as a maximum number of notes per second
     function ent_methods:playNote( noteIdx )
-        SF.CheckType( self, SF.Entities.Metatable )
         SF.CheckLuaType( noteIdx, TYPE_NUMBER )
 
-        local ent = SF.Entities.Unwrap( self )
+        local ent = getent( self )
         if not ent.OnRegisteredKeyPlayed then
             error( "Entity is not an instrument." )
         end
@@ -68,4 +76,4 @@ hook.Add( "Initialize", "MIDI_SF", function()
         cfc_midi.sendNote( ent, noteIdx )
         return true
     end
-end )
+end
