@@ -1,7 +1,6 @@
 cfc_midi = {}
 
 include( "cfc_midi_interface/key_lookup.lua" )
-include( "cfc_midi_interface/starfall_midi.lua" )
 include( "cfc_midi_interface/console.lua" )
 
 local table = table
